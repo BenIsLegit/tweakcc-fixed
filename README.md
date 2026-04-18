@@ -28,16 +28,16 @@ All four PRs below are open (unmerged) upstream at the time of forking. Their fi
 
 These are not in any upstream PR and are unique to this fork.
 
-- **`bcce70a` — Scope PR #664's backslash-doubling to quote contexts.**
-  PR #664's pre-processing ran before every delimiter branch, including backticks. In template-literal content, `escapeDepthZeroBackticks` is already parity-aware, so blindly pre-doubling turned `` `\`find\`` `` into a prematurely-terminated template literal and caused `cli.js` to fail to load with *"Expected CommonJS module to have a function wrapper"*. This fix limits the doubling to `"` and `'` contexts only.
+- **[`bcce70a`](https://github.com/BenIsLegit/tweakcc-fixed/commit/bcce70a) — Scope [PR #664](https://github.com/Piebald-AI/tweakcc/pull/664)'s backslash-doubling to quote contexts.**
+  [PR #664](https://github.com/Piebald-AI/tweakcc/pull/664)'s pre-processing ran before every delimiter branch, including backticks. In template-literal content, `escapeDepthZeroBackticks` is already parity-aware, so blindly pre-doubling turned `` `\`find\`` `` into a prematurely-terminated template literal and caused `cli.js` to fail to load with *"Expected CommonJS module to have a function wrapper"*. This fix limits the doubling to `"` and `'` contexts only. Affects [issue #660](https://github.com/Piebald-AI/tweakcc/issues/660).
 
-- **`207b57c` — Align PR #664's backtick tests with the scoped-doubling fix.**
+- **[`207b57c`](https://github.com/BenIsLegit/tweakcc-fixed/commit/207b57c) — Align [PR #664](https://github.com/Piebald-AI/tweakcc/pull/664)'s backtick tests with the scoped-doubling fix.**
   The two backtick-context tests encoded a *literal-text* interpretation of prompt content, which doesn't match tweakcc's storage format (markdown files hold the JS-source-escaped form extracted from `cli.js` template literals). Tests now assert the scoped behavior.
 
-- **`3c08e0c` — Adapt patch regexes to CC 2.1.113's minified shapes.**
+- **[`3c08e0c`](https://github.com/BenIsLegit/tweakcc-fixed/commit/3c08e0c) — Adapt patch regexes to CC 2.1.113's minified shapes.**
   Updates matchers in `opusplan1m`, `patchesAppliedIndication`, `thinkerFormat`, and `verboseProperty` so each patch still locates its target in the 2.1.113 build output.
 
-- **`c87898c` — Don't overwrite `verbose:X` inside destructuring patterns.**
+- **[`c87898c`](https://github.com/BenIsLegit/tweakcc-fixed/commit/c87898c) — Don't overwrite `verbose:X` inside destructuring patterns.**
   The `verboseProperty` patch was greedy enough to match `{ verbose: localName }` in destructure targets and replace it with `verbose: true`, which is a syntax error. The fix scopes the replacement to property-value positions only.
 
 ## Installation
