@@ -1,6 +1,6 @@
 {
   "name": "tweakcc-fixed",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "type": "module",
   "description": "Temporary fork of tweakcc with pending upstream fixes cherry-picked and additional patches for Claude Code 2.1.113+ compatibility.",
   "main": "dist/lib/index.mjs",
