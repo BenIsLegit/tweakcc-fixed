@@ -41,6 +41,15 @@ These are not in any upstream PR and are unique to this fork.
 - **[`c87898c`](https://github.com/BenIsLegit/tweakcc-fixed/commit/c87898c) — Don't overwrite `verbose:X` inside destructuring patterns.**
   The `verboseProperty` patch was greedy enough to match `{ verbose: localName }` in destructure targets and replace it with `verbose: true`, which is a syntax error. The fix scopes the replacement to property-value positions only.
 
+- **[`dc84a6c`](https://github.com/BenIsLegit/tweakcc-fixed/commit/dc84a6c) — Preserve CC's theme background and default padding in the `userMessageDisplay` patch.**
+  Stock CC 2.1.79+ sets `backgroundColor: "userMessageBackground"` and `paddingRight: 1` on the user-message Box; the replacement Box dropped both, stripping the theme-provided message background and the trailing column of bg that hugs the text. `backgroundColor: "default"` now re-emits the theme token, `paddingX`/`paddingY` accept `'default'` (emitting `paddingRight: 1` to match CC's native look), and the UI gains Default/Custom radios for each padding axis. Default settings flip to `'default'` so ctrl+R and fresh installs match CC's out-of-box appearance.
+
+- **[`89555eb`](https://github.com/BenIsLegit/tweakcc-fixed/commit/89555eb) — Make ctrl+R honor the new default fg/bg modes.**
+  `restoreToOriginal` was hardcoding `'none'`/`'default'` for the bg/fg modes, which stopped lining up after the default settings shifted in `dc84a6c`. The mode is now derived from `DEFAULT_SETTINGS` so restore actually matches what new installs get.
+
+- **[`3114c5b`](https://github.com/BenIsLegit/tweakcc-fixed/commit/3114c5b) — Forward theme fg/bg tokens to the replacement `Text` so "default" colors survive wrapping.**
+  When fg/bg is `'default'` the chalk chain emits no color codes, so the inner `Text` fell back to the terminal's default fg — and on narrow/wrapped user messages whole cells rendered without the theme color (matching the report that "default" bg/fg worked on slash commands but not regular messages). The patch now also forwards `color: "text"` and `backgroundColor: "userMessageBackground"` onto the replacement `Text` so the theme colors reach the cells chalk can't paint.
+
 ## Installation
 
 Published to npm as [`tweakcc-fixed`](https://www.npmjs.com/package/tweakcc-fixed). Run without installation:
