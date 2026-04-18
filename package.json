@@ -1,12 +1,12 @@
 {
-  "name": "tweakcc",
+  "name": "tweakcc-fixed",
   "version": "4.0.11",
   "type": "module",
-  "description": "Command-line tool to customize your Claude Code theme colors, thinking verbs and more.",
+  "description": "Temporary fork of tweakcc with pending upstream fixes cherry-picked and additional patches for Claude Code 2.1.113+ compatibility.",
   "main": "dist/lib/index.mjs",
   "types": "dist/lib/index.d.ts",
   "bin": {
-    "tweakcc": "./dist/index.mjs"
+    "tweakcc-fixed": "./dist/index.mjs"
   },
   "exports": {
     ".": {
@@ -23,7 +23,8 @@
     "test": "vitest run",
     "test:dev": "vitest",
     "format": "prettier --write src",
-    "prepare": "husky"
+    "prepare": "husky",
+    "prepublishOnly": "pnpm build"
   },
   "keywords": [
     "cli",
@@ -45,10 +46,29 @@
     "email": "support@piebald.ai",
     "url": "https://piebald.ai"
   },
+  "contributors": [
+    {
+      "name": "Ben",
+      "email": "Ben@noreply.cathedral.gg",
+      "url": "https://github.com/BenIsLegit"
+    }
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Piebald-AI/tweakcc.git"
+    "url": "git+https://github.com/BenIsLegit/tweakcc-fixed.git"
+  },
+  "homepage": "https://github.com/BenIsLegit/tweakcc-fixed#readme",
+  "bugs": {
+    "url": "https://github.com/BenIsLegit/tweakcc-fixed/issues"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
