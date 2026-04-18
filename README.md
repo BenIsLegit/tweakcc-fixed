@@ -9,9 +9,10 @@ For full documentation of what tweakcc is and how to use it, see the [**upstream
 
 ## Base
 
-- **tweakcc version:** `4.0.11`
+- **Upstream tweakcc version:** `4.0.11`
 - **Based on upstream commit:** [`2e1d03e`](https://github.com/Piebald-AI/tweakcc/commit/2e1d03e) — _Prompts for 2.1.113_ ([#692](https://github.com/Piebald-AI/tweakcc/pull/692))
 - **Target Claude Code versions:** up to and including **2.1.113**
+- **This package's version:** starts fresh at `1.0.0` on first publish, with its own semver independent of upstream
 
 ## Cherry-picked upstream PRs
 
