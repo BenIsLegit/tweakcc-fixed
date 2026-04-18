@@ -50,6 +50,9 @@ These are not in any upstream PR and are unique to this fork.
 - **[`3114c5b`](https://github.com/BenIsLegit/tweakcc-fixed/commit/3114c5b) — Forward theme fg/bg tokens to the replacement `Text` so "default" colors survive wrapping.**
   When fg/bg is `'default'` the chalk chain emits no color codes, so the inner `Text` fell back to the terminal's default fg — and on narrow/wrapped user messages whole cells rendered without the theme color (matching the report that "default" bg/fg worked on slash commands but not regular messages). The patch now also forwards `color: "text"` and `backgroundColor: "userMessageBackground"` onto the replacement `Text` so the theme colors reach the cells chalk can't paint.
 
+- **[`1e28b59`](https://github.com/BenIsLegit/tweakcc-fixed/commit/1e28b59) — Match the shrunken past-tense thinking-verb array in recent CC builds.**
+  Apply-time failed with `patch: thinkingVerbs: failed to find past tense verbs pattern`. The past-tense regex required `{50,}` capitalised entries — which matched the pre-2.x ~170-entry list but not the 8-entry `-ed` cooking array CC now ships (observed across 2.1.70–2.1.113): `["Baked","Brewed","Churned","Cogitated","Cooked","Crunched","Sautéed","Worked"]`. The fix anchors each entry on an `ed` suffix and drops the minimum to `{6,}`, which keeps us from colliding with the far-larger present-tense `-ing` array (handled by the earlier pass) or the user's substituted `-ing` verbs. 2.1.113 is a bun-compiled native binary that encodes `"Sautéed"` as the literal escape `"Saut\xE9ed"` rather than raw UTF-8; the existing character class already covers backslash/x/hex-digit/é, so both serialisation forms match without a code change — verified against all four cli.js shapes.
+
 ## Installation
 
 Published to npm as [`tweakcc-fixed`](https://www.npmjs.com/package/tweakcc-fixed). Run without installation:

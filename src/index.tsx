@@ -159,7 +159,7 @@ const main = async () => {
       'Temporary fork of tweakcc with pending upstream fixes cherry-picked and additional patches for Claude Code 2.1.113+ compatibility.'
     )
     // Keep this in sync with package.json `version` on every release.
-    .version('1.0.2')
+    .version('1.0.3')
     .option('-d, --debug', 'enable debug mode')
     .option('-v, --verbose', 'enable verbose debug mode (includes diffs)')
     .option('--show-unchanged', 'show unchanged diffs (requires --verbose)')
