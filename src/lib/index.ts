@@ -1,8 +1,11 @@
 /**
- * tweakcc Library
+ * tweakcc-fixed Library
  *
  * Claude Code patching utilities - the building blocks that tweakcc uses,
- * exposed for others to build their own tools.
+ * exposed for others to build their own tools. This fork's library API is
+ * 100% compatible with upstream tweakcc's API; imports that reference
+ * 'tweakcc' in upstream docs work identically here — just swap the
+ * package name when installing.
  *
  * @example
  * ```typescript
@@ -13,7 +16,7 @@
  *   writeContent,
  *   backupFile,
  *   helpers,
- * } from 'tweakcc';
+ * } from 'tweakcc-fixed';
  *
  * // Find Claude Code
  * const installation = await tryDetectInstallation({ interactive: true });

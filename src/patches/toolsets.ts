@@ -653,7 +653,7 @@ export const writeToolsetComponentDefinition = (
       ${reactVar}.createElement(${boxComponent}, null,
         ${reactVar}.createElement(${textComponent}, { dimColor: true, bold: true }, "Toolsets are managed with tweakcc. "),
         ${reactVar}.createElement(${textComponent}, { dimColor: true }, "Run "),
-        ${reactVar}.createElement(${textComponent}, { color: "permission" }, "npx tweakcc"),
+        ${reactVar}.createElement(${textComponent}, { color: "permission" }, "npx tweakcc-fixed"),
         ${reactVar}.createElement(${textComponent}, { dimColor: true }, " to manage them.")
       ),
       ${reactVar}.createElement(${boxComponent}, { marginBottom: 1 },

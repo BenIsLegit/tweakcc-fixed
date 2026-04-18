@@ -51,8 +51,8 @@ import { clearAllAppliedHashes } from './systemPromptHashIndex';
 // =============================================================================
 
 /**
- * Detects how the user invoked tweakcc to show the correct --apply command.
- * Handles: tweakcc, npx tweakcc, pnpm dlx tweakcc, yarn dlx tweakcc, etc.
+ * Detects how the user invoked tweakcc-fixed to show the correct --apply command.
+ * Handles: tweakcc-fixed, npx tweakcc-fixed, pnpm dlx tweakcc-fixed, yarn dlx tweakcc-fixed, etc.
  */
 function getInvocationCommand(): string {
   const args = process.argv;
@@ -63,20 +63,20 @@ function getInvocationCommand(): string {
 
   // Check for package manager dlx/npx patterns in the path
   if (scriptPath.includes('npx') || scriptPath.includes('.npm/_npx')) {
-    return 'npx tweakcc';
+    return 'npx tweakcc-fixed@latest';
   }
   if (scriptPath.includes('pnpm') || scriptPath.includes('.pnpm')) {
-    return 'pnpm dlx tweakcc';
+    return 'pnpm dlx tweakcc-fixed@latest';
   }
   if (scriptPath.includes('yarn')) {
-    return 'yarn dlx tweakcc';
+    return 'yarn dlx tweakcc-fixed@latest';
   }
   if (scriptPath.includes('bun')) {
-    return 'bunx tweakcc';
+    return 'bunx tweakcc-fixed@latest';
   }
 
-  // Default to just 'tweakcc' (globally installed or via PATH)
-  return 'tweakcc';
+  // Default to just 'tweakcc-fixed' (globally installed or via PATH)
+  return 'tweakcc-fixed';
 }
 
 // =============================================================================
@@ -154,11 +154,12 @@ function printPatchResults(
 const main = async () => {
   const program = new Command();
   program
-    .name('tweakcc')
+    .name('tweakcc-fixed')
     .description(
-      'Command-line tool to customize your Claude Code theme colors, thinking verbs and more.'
+      'Temporary fork of tweakcc with pending upstream fixes cherry-picked and additional patches for Claude Code 2.1.113+ compatibility.'
     )
-    .version('4.0.11')
+    // Keep this in sync with package.json `version` on every release.
+    .version('1.0.0')
     .option('-d, --debug', 'enable debug mode')
     .option('-v, --verbose', 'enable verbose debug mode (includes diffs)')
     .option('--show-unchanged', 'show unchanged diffs (requires --verbose)')
