@@ -1,6 +1,6 @@
 # tweakcc-fixed
 
-A **temporary fork of [tweakcc](https://github.com/Piebald-AI/tweakcc)** that bundles together several pending upstream fixes, with a few additional fixes on top, so `tweakcc` works cleanly against recent Claude Code releases (through **CC 2.1.113**) while upstream catches up.
+A **temporary fork of [tweakcc](https://github.com/Piebald-AI/tweakcc)** that bundles together several pending upstream fixes, with a few additional fixes on top, so `tweakcc` works cleanly against recent Claude Code releases (through **CC 2.1.116**) while upstream catches up.
 
 > [!NOTE]
 > This fork exists only to unblock users while the fixes below are reviewed and merged upstream. Once the relevant PRs land in [Piebald-AI/tweakcc](https://github.com/Piebald-AI/tweakcc), switch back to upstream.
@@ -11,7 +11,7 @@ For full documentation of what tweakcc is and how to use it, see the [**upstream
 
 - **Upstream tweakcc version:** `4.0.11`
 - **Based on upstream commit:** [`2e1d03e`](https://github.com/Piebald-AI/tweakcc/commit/2e1d03e) — _Prompts for 2.1.113_ ([#692](https://github.com/Piebald-AI/tweakcc/pull/692))
-- **Target Claude Code versions:** up to and including **2.1.113**
+- **Target Claude Code versions:** up to and including **2.1.116**
 - **This package's version:** starts at `1.0.x` on first publish, with its own semver independent of upstream
 
 ## Cherry-picked upstream PRs
