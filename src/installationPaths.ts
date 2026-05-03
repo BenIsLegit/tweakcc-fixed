@@ -251,6 +251,84 @@ const getNativeSearchPathsWithInfo = (): SearchPathInfo[] => {
   // Versioned binaries (filenames are versions like 2.0.65)
   addPath(`${home}/.local/share/claude/versions/*`, true);
 
+  // CC 2.1.116+ ships as a native binary (bin/claude.exe on Windows, bin/claude elsewhere)
+  // inside the npm package — no cli.js. Add native binary search paths that mirror CLIJS
+  // search locations so the binary is discovered even when cli.js is absent.
+  const bin = process.platform === 'win32' ? 'bin/claude.exe' : 'bin/claude';
+  const nativeMod = `node_modules/@anthropic-ai/claude-code/${bin}`;
+
+  if (process.platform === 'win32') {
+    addPath(
+      `${home}/AppData/Local/Volta/tools/image/packages/@anthropic-ai/claude-code/${nativeMod}`
+    );
+    addPath(`${home}/AppData/Roaming/npm/${nativeMod}`);
+    addPath(`${home}/AppData/Roaming/nvm/*/${nativeMod}`, true);
+    addPath(`${home}/AppData/Local/Yarn/config/global/${nativeMod}`);
+    addPath(`${home}/AppData/Local/pnpm/global/*/${nativeMod}`, true);
+    addPath(`${home}/AppData/Roaming/Yarn/config/global/${nativeMod}`);
+    addPath(`${home}/AppData/Roaming/pnpm-global/${nativeMod}`);
+    addPath(`${home}/AppData/Roaming/pnpm-global/*/${nativeMod}`, true);
+    addPath(`${home}/.bun/install/global/${nativeMod}`);
+    addPath(`${home}/AppData/Local/fnm_multishells/*/${nativeMod}`, true);
+    addPath(`${home}/AppData/Local/mise/installs/node/*/${nativeMod}`, true);
+    addPath(
+      `${home}/AppData/Local/mise/installs/npm-anthropic-ai-claude-code/*/${nativeMod}`,
+      true
+    );
+    addPath(`C:/nvm4w/nodejs/${nativeMod}`);
+    addPath(`${home}/n/versions/node/*/lib/${nativeMod}`, true);
+  } else {
+    if (process.platform === 'darwin') {
+      addPath(`${home}/Library/${nativeMod}`);
+      addPath(`/opt/local/lib/${nativeMod}`);
+    }
+    addPath(`${home}/.local/lib/${nativeMod}`);
+    addPath(`${home}/.local/share/${nativeMod}`);
+    addPath(`${home}/.npm-global/lib/${nativeMod}`);
+    addPath(`${home}/.npm-packages/lib/${nativeMod}`);
+    addPath(`${home}/.npm/lib/${nativeMod}`);
+    addPath(`${home}/npm/lib/${nativeMod}`);
+    addPath(`/usr/lib/${nativeMod}`);
+    addPath(`/usr/local/lib/${nativeMod}`);
+    addPath(`/opt/homebrew/lib/${nativeMod}`);
+    addPath(`${home}/.linuxbrew/lib/${nativeMod}`);
+    addPath(`${home}/.config/yarn/global/${nativeMod}`);
+    addPath(`${home}/.yarn/global/${nativeMod}`);
+    addPath(`${home}/.bun/install/global/${nativeMod}`);
+    addPath(`${home}/.pnpm-global/${nativeMod}`);
+    addPath(`${home}/.pnpm-global/*/${nativeMod}`, true);
+    addPath(`${home}/.local/share/pnpm/global/${nativeMod}`);
+    addPath(`${home}/.local/share/pnpm/global/*/${nativeMod}`, true);
+    addPath(`${home}/.volta/tools/image/node/*/lib/${nativeMod}`, true);
+    addPath(`${home}/.fnm/node-versions/*/installation/lib/${nativeMod}`, true);
+    addPath(`${home}/.nvm/versions/node/*/lib/${nativeMod}`, true);
+    addPath(`/usr/local/nvm/versions/node/*/lib/${nativeMod}`, true);
+    addPath(`${home}/.nodenv/versions/*/lib/${nativeMod}`, true);
+    addPath(`${home}/.asdf/installs/nodejs/*/lib/${nativeMod}`, true);
+    addPath(`${home}/.local/share/mise/installs/node/*/lib/${nativeMod}`, true);
+    addPath(
+      `${home}/.local/share/mise/installs/npm-anthropic-ai-claude-code/*/lib/${nativeMod}`,
+      true
+    );
+    if (process.env.NPM_PREFIX)
+      addPath(`${process.env.NPM_PREFIX}/lib/${nativeMod}`);
+    if (process.env.N_PREFIX)
+      addPath(`${process.env.N_PREFIX}/lib/${nativeMod}`);
+    if (process.env.VOLTA_HOME)
+      addPath(`${process.env.VOLTA_HOME}/lib/${nativeMod}`);
+    if (process.env.NVM_DIR) addPath(`${process.env.NVM_DIR}/lib/${nativeMod}`);
+    if (process.env.MISE_DATA_DIR)
+      addPath(
+        `${process.env.MISE_DATA_DIR}/installs/node/*/lib/${nativeMod}`,
+        true
+      );
+    if (process.env.MISE_DATA_DIR)
+      addPath(
+        `${process.env.MISE_DATA_DIR}/installs/npm-anthropic-ai-claude-code/*/lib/${nativeMod}`,
+        true
+      );
+  }
+
   // Convert to backslashes on Windows
   if (process.platform === 'win32') {
     pathInfos.forEach(info => {

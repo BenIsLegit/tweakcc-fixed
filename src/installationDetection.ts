@@ -334,6 +334,48 @@ async function getClaudeFromPath(): Promise<string | null> {
   }
 }
 
+/**
+ * On Windows, npm creates lightweight shim scripts (a `#!/bin/sh` shell script
+ * and a `.cmd` batch file) that exec the real binary.  When `which` returns one
+ * of these shims, `resolvePathToInstallationType` sees an unrecognized text
+ * file instead of the actual executable.
+ *
+ * This function reads the shim content and extracts the target path.
+ * Returns null if the file is not a recognized npm shim.
+ */
+async function resolveNpmShimTarget(shimPath: string): Promise<string | null> {
+  try {
+    const content = await fs.readFile(shimPath, 'utf8');
+
+    // npm sh shim: exec "$basedir/node_modules/.../claude.exe"  "$@"
+    const shMatch = content.match(/"\$basedir\/([^"]+)"/);
+    if (shMatch) {
+      const target = path.resolve(path.dirname(shimPath), shMatch[1]);
+      if (await doesFileExist(target)) {
+        debug(`resolveNpmShimTarget: resolved sh shim -> ${target}`);
+        return target;
+      }
+    }
+
+    // npm .cmd shim: "%dp0%\node_modules\...\claude.exe"  %*
+    const cmdMatch = content.match(/"%dp0%\\([^"]+)"/);
+    if (cmdMatch) {
+      const target = path.resolve(
+        path.dirname(shimPath),
+        cmdMatch[1].replace(/\\/g, '/')
+      );
+      if (await doesFileExist(target)) {
+        debug(`resolveNpmShimTarget: resolved cmd shim -> ${target}`);
+        return target;
+      }
+    }
+
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 // ============================================================================
 // Version extraction
 // ============================================================================
@@ -682,7 +724,29 @@ export async function findClaudeCodeInstallation(
   if (pathClaudeExe) {
     debug(`Checking claude on PATH: ${pathClaudeExe}`);
 
-    const resolved = await resolvePathToInstallationType(pathClaudeExe);
+    let resolved = await resolvePathToInstallationType(pathClaudeExe);
+
+    // On Windows, `which` may find an npm shim (sh/cmd wrapper) instead of the
+    // actual binary.  Try to follow the shim to the real executable.
+    if (!resolved) {
+      const shimTarget = await resolveNpmShimTarget(pathClaudeExe);
+      if (shimTarget) {
+        debug(`Resolved npm shim -> ${shimTarget}`);
+        resolved = await resolvePathToInstallationType(shimTarget);
+      }
+      // Also try the .cmd variant alongside the bare shim
+      if (!resolved) {
+        const cmdPath = pathClaudeExe + '.cmd';
+        if (await doesFileExist(cmdPath)) {
+          const cmdTarget = await resolveNpmShimTarget(cmdPath);
+          if (cmdTarget) {
+            debug(`Resolved npm .cmd shim -> ${cmdTarget}`);
+            resolved = await resolvePathToInstallationType(cmdTarget);
+          }
+        }
+      }
+    }
+
     if (!resolved) {
       debug(
         `Unable to detect installation type from 'claude' on PATH (${pathClaudeExe}). ` +
