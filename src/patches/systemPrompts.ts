@@ -161,12 +161,15 @@ export const applySystemPrompts = async (
       }
 
       if (delimiter === '"') {
-        replacementContent = replacementContent.replace(/\n/g, '\\n');
+        replacementContent = replacementContent.replace(/\r\n|\r|\n/g, '\\n');
         replacementContent = escapeUnescapedChar(replacementContent, '"');
       } else if (delimiter === "'") {
-        replacementContent = replacementContent.replace(/\n/g, '\\n');
+        replacementContent = replacementContent.replace(/\r\n|\r|\n/g, '\\n');
         replacementContent = escapeUnescapedChar(replacementContent, "'");
       } else if (delimiter === '`') {
+        replacementContent = replacementContent
+          .replace(/\r\n/g, '\n')
+          .replace(/\r/g, '\n');
         const { content: escaped, incomplete } =
           escapeDepthZeroBackticks(replacementContent);
         if (incomplete) {
